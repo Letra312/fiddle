@@ -1,6 +1,6 @@
 import { reaction } from 'mobx';
 import { observer } from 'mobx-react';
-import * as MonacoType from 'monaco-editor';
+import * as monaco from 'monaco-editor';
 import * as React from 'react';
 import { Mosaic, MosaicBranch, MosaicNode, MosaicWindow, MosaicWindowProps } from 'react-mosaic-component';
 
@@ -20,7 +20,7 @@ import { renderNonIdealState } from './editors-non-ideal-state';
 import { DocsDemoGoHomeButton, MaximizeButton, RemoveButton } from './editors-toolbar-button';
 import { ShowMe } from './show-me';
 
-const defaultMonacoOptions: MonacoType.editor.IEditorOptions = {
+const defaultMonacoOptions: monaco.editor.IEditorOptions = {
   minimap: {
     enabled: false
   },
@@ -40,9 +40,9 @@ export interface EditorsProps {
 }
 
 export interface EditorsState {
-  monaco?: typeof MonacoType;
+  monaco?: typeof monaco;
   isMounted?: boolean;
-  monacoOptions: MonacoType.editor.IEditorOptions;
+  monacoOptions: monaco.editor.IEditorOptions;
 }
 
 @observer
@@ -132,7 +132,7 @@ export class Editors extends React.Component<EditorsProps, EditorsState> {
 
       Object.keys(window.ElectronFiddle.editors)
         .forEach((key) => {
-          const editor: MonacoType.editor.IStandaloneCodeEditor | null
+          const editor: monaco.editor.IStandaloneCodeEditor | null
             = window.ElectronFiddle.editors[key];
 
           if (editor) {
@@ -229,7 +229,6 @@ export class Editors extends React.Component<EditorsProps, EditorsState> {
    */
   public renderEditor(id: EditorId): JSX.Element | null {
     const { appState } = this.props;
-    const { monaco } = this.state;
 
     return (
       <Editor
@@ -243,7 +242,6 @@ export class Editors extends React.Component<EditorsProps, EditorsState> {
 
   public render() {
     const { appState } = this.props;
-    const { monaco } = this.state;
 
     if (!monaco) return null;
 
@@ -273,8 +271,6 @@ export class Editors extends React.Component<EditorsProps, EditorsState> {
    */
   public async loadMonaco(): Promise<void> {
     const { app } = window.ElectronFiddle;
-    const loader = require('monaco-loader');
-    const monaco = app.monaco || await loader();
 
     if (!app.monaco) {
       app.monaco = monaco;

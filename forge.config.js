@@ -9,7 +9,7 @@ const iconDir = path.resolve(__dirname, 'assets', 'icons')
 
 module.exports = {
   hooks: {
-    generateAssets: require('./tools/generateAssets')
+    //generateAssets: require('./tools/generateAssets')
   },
   packagerConfig: {
     name: 'Electron Fiddle',
@@ -93,5 +93,20 @@ module.exports = {
         prerelease: false
       }
     }
+  ],
+  plugins: [
+    ['@electron-forge/plugin-webpack', {
+      mainConfig: './webpack.main.config.js',
+      renderer: {
+        config: './webpack.renderer.config.js',
+        entryPoints: [
+          {
+            html: './static/index.html',
+            js: './src/renderer/app.tsx',
+            name: 'main_window'
+          }
+        ]
+      }
+    }]
   ]
 }
